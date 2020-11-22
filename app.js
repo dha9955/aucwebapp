@@ -1,4 +1,7 @@
-const express = require("express");
+const express = require("express"), app = express(), server = require('http').createServer(app);
+//Start sever
+server.listen(process.env.PORT || 3001)
+
 const logger = require("morgan");
 const mongoClient = require("mongoose");
 const bodyParser = require("body-parser");
@@ -21,7 +24,6 @@ mongoClient
   .catch((error) => console.error(`cant connect to db ${error}`));
 
 // Middlewares
-const app = express();
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,6 +32,7 @@ app.use(cors());
 // Router
 app.use("/users", userRoute);
 app.use("/products", productRoute);
+
 
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
@@ -50,6 +53,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-//Start sever
-const port = app.get("port") || 3001;
-app.listen(port, () => console.log(`Server is listening on port ${port}`));
+
