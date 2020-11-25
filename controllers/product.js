@@ -26,11 +26,7 @@ const createProduct = async (req, res, next) => {
     endTime: moment().add(timeRange, "d"),
     status: "posted",
   });
-  newProduct.save();
-  const user = await User.findOne({ _id: userID });
-  // Add product to user
-  user.products.push(newProduct._id);
-  await user.save();
+  await newProduct.save();
   return res.status(201).json({ product: newProduct });
 };
 
@@ -59,7 +55,7 @@ const getProductbyID = async (req, res, next) => {
 };
 // Get Product by User
 const getProductbyUser = async (req, res, next) => {
-  const { userID } = req.body.userID;
+  const userID  = req.body.userID;
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const product = await Product.find({ owner: userID });

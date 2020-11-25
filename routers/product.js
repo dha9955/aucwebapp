@@ -13,7 +13,7 @@ router
 
 // G
 router.route("/getProductbyUser").get(productController.getProductbyUser);
-
-router.route("getProductbyID").get(productController.getProductbyID);
+//
+router.route("/getProductbyID").get(productController.getProductbyID);
 
 module.exports = router;

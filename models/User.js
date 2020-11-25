@@ -37,12 +37,6 @@ const UserSchema = new Schema(
       type: String,
       default: null,
     },
-    products: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
   },
   { collection: "User" }
 );

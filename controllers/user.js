@@ -87,7 +87,7 @@ const signUp = async (req, res, next) => {
     address: address,
     pNumber: pNumber,
   });
-  newUser.save();
+  await newUser.save();
   //Encode
   const token = createEncodeToken(newUser);
   res.setHeader("Authorization", token);

@@ -13,7 +13,7 @@ const cors = require("cors");
 const userRoute = require("./routers/user");
 const productRoute = require("./routers/product");
 const auctionRoute = require("./routers/auction");
-
+const invoiceRoute = require("./routers/invoice");
 // Setup connect mongodb
 mongoClient
   .connect(
@@ -38,7 +38,7 @@ app.use(cors());
 app.use("/users", userRoute);
 app.use("/products", productRoute);
 app.use("/auctions", auctionRoute);
-
+app.use("/invoices", invoiceRoute);
 // Catch 404 Errors and forward them to error handler
 app.use((req, res, next) => {
   const err = new Error("Not Found");
