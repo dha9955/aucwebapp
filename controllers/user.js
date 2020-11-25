@@ -2,10 +2,8 @@ const express = require("express");
 const { paginationData } = require("./pagination");
 const { JWT_SECRET } = require("../configs/index");
 const JWT = require("jsonwebtoken");
-const moment = require('moment')
 //
 const User = require("../models/User");
-const Product = require("../models/Product")
 
 // A
 // Auth Google
@@ -21,38 +19,13 @@ const authFacebook = async (req, res, next) => {
   return res.status(201).json({ success: true });
 };
 
-
-// C
-// Create User's Product
-const createUsersProduct = async (req, res, next) => {
-  const {userID} = req.params
-  const {timeRange} = req.body.timeRange
-  // create new product
-  const newProduct = new Product({
-    name: req.body.name,
-    image: req.body.image,
-    categoy: req.body.categoy,
-    condition: req.body.condition,
-    brand: req.body.brand,
-    description: req.body.description,
-    startPrice: req.body.startPrice,
-    buyNowPrice: req.body.buyNowPrice,
-    stepUp: req.body.stepUp,
-    currentPrice: req.body.startPrice,
-    startTime: moment().toString(),
-    endTime: moment().add(timeRange, 'd'),
-    status: 'posted'
-  })
-  const user = await User.findById(userID)
-  newProduct.owner = userID
-  await newProduct.save()
-  // Add product to user
-  user.products.push(newProduct._id)
-  await user.save()
-  return res.status(201).json({product: newProduct})
+// Delete User
+const deleteUser = async (req, res, next) => {
+  const userID  = req.body.userID;
+  //get product
+  const user = await User.findOneAndDelete({ _id: userID });
+  return res.status(200).json({ success: true });
 };
-
-
 // E
 // Encoded
 const createEncodeToken = (user) => {
@@ -74,16 +47,6 @@ const getAllUsers = async (req, res, next) => {
   const results = paginationData(user, page, limit);
   return res.status(200).json({ results });
 };
-//Get User's Products
-const geUsersProducts = async (req, res, next)=>{
-  const {userID} = req.params
-  const page = parseInt(req.query.page);
-  const limit = parseInt(req.query.limit);
-  const product = await Product.find({owner:userID})
-  const results = paginationData(product, page, limit);
-  return res.status(200).json({results})
-}
-
 
 // S
 // Secret
@@ -129,15 +92,14 @@ const signUp = async (req, res, next) => {
   const token = createEncodeToken(newUser);
   res.setHeader("Authorization", token);
   //Decrypt
-  return res.status(201).json({ success: true });
+  return res.status(201).json({ success: true, token });
 };
 
 module.exports = {
   authGoogle,
   authFacebook,
-  createUsersProduct,
+  deleteUser,
   getAllUsers,
-  geUsersProducts,
   secret,
   signIn,
   signUp,

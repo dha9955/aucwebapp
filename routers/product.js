@@ -4,12 +4,16 @@ const router = require("express-promise-router")();
 //
 const productController = require("../controllers/product");
 
-
 //
-router.route("/").get(productController.getAllProduct)
+router
+  .route("/")
+  .get(productController.getAllProduct)
+  .post(productController.createProduct)
+  .delete(productController.deleteProduct);
 
 // G
-router.route("/:productID").get(productController.getProductbyID);
+router.route("/getProductbyUser").get(productController.getProductbyUser);
 
+router.route("getProductbyID").get(productController.getProductbyID);
 
 module.exports = router;
