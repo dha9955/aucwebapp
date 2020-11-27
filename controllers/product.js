@@ -7,11 +7,10 @@ const moment = require("moment");
 // C
 // Create Product
 const createProduct = async (req, res, next) => {
-  const userID = req.body.userID;
   const timeRange = req.body.timeRange;
   // create new product
   const newProduct = new Product({
-    owner: userID,
+    owner: req.body.userID,
     name: req.body.name,
     image: req.body.image,
     category: req.body.categoy,
@@ -42,10 +41,11 @@ const deleteProduct = async (req, res, next) => {
 // Get All Product
 const getAllProduct = async (req, res, next) => {
   const product = await Product.find({});
+  const total = await Product.count({});
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
   const results = paginationData(product, page, limit);
-  return res.status(200).json({ results });
+  return res.status(200).json({ total, results });
 };
 // Get Product by ID
 const getProductbyID = async (req, res, next) => {
@@ -63,10 +63,53 @@ const getProductbyUser = async (req, res, next) => {
   return res.status(200).json({ results });
 };
 
+// S
+// Sort product descending
+const sortDesPrice = async (req, res, next) =>{
+  const mysort = {currentPrice:-1};
+  const product = await Product.find({}).sort(mysort);
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const results = paginationData(product, page, limit);
+  return res.status(200).json({results});
+}
+// Sort product ascending
+const sortAscPrice = async (req, res, next) =>{
+  const mysort = {currentPrice:1};
+  const product = await Product.find({}).sort(mysort);
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const results = paginationData(product, page, limit);
+  return res.status(200).json({results});
+}
+// Sort product newest
+const sortNewestProduct = async (req, res, next) =>{
+  const mysort = {startTime:-1};
+  const product = await Product.find({}).sort(mysort);
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const results = paginationData(product, page, limit);
+  return res.status(200).json({results});
+}
+// Sort product endingSoon
+const sortEndingSoonProduct = async (req, res, next) =>{
+  const mysort = {endTime:1}
+  const product = await Product.find({}).sort(mysort);
+  const page = parseInt(req.query.page);
+  const limit = parseInt(req.query.limit);
+  const results = paginationData(product, page, limit);
+  return res.status(200).json({results});
+}
+
+
 module.exports = {
   createProduct,
   deleteProduct,
   getAllProduct,
   getProductbyID,
   getProductbyUser,
+  sortAscPrice,
+  sortDesPrice,
+  sortEndingSoonProduct,
+  sortNewestProduct,
 };
