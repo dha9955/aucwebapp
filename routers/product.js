@@ -14,7 +14,7 @@ router
 // G
 router.route("/getProductbyUser").get(productController.getProductbyUser);
 //
-router.route("/getProductbyID").get(productController.getProductbyID);
+router.route("/:productID").get(productController.getProductbyID);
 
 
 // S

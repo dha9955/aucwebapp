@@ -49,7 +49,7 @@ const getAllProduct = async (req, res, next) => {
 };
 // Get Product by ID
 const getProductbyID = async (req, res, next) => {
-  const productID  = req.body.productID;
+  const {productID}  = req.params
   const product = await Product.findById({ _id: productID });
   return res.status(200).json(product);
 };
